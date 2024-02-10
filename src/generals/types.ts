@@ -16,8 +16,7 @@ type SquareType = PlayerSquareType | NeutralSquareType;
 
 interface Square {
   type: SquareType;
-  x: number;
-  y: number;
+  coord: Coord;
 }
 
 interface PlayerSquare extends Square {
@@ -28,6 +27,15 @@ interface PlayerSquare extends Square {
 
 type GameGrid = Square[][];
 
+type Coord = { x: number; y: number; };
+
+enum Movement {
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+}
+
 export {
   PlayerSquareType,
   NeutralSquareType,
@@ -35,4 +43,6 @@ export {
   type Square,
   type PlayerSquare,
   type GameGrid,
+  type Coord,
+  Movement,
 };
