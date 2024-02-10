@@ -20,6 +20,15 @@ enum CellType {
   BLANK,
 }
 
+function cellTypeToStr(ct: CellType): string {
+  switch (ct) {
+    case CellType.MOUNTAIN:
+      return 'mountain';
+    case CellType.BLANK:
+      return 'blank';
+  }
+}
+
 interface Cell {
   x: number;
   y: number;
@@ -29,7 +38,7 @@ type MaybeCell = Cell | null;
 
 type CellGrid = MaybeCell[][];
 
-function generateGrid(size: { width: number, height: number}) {
+function generateGrid(size: { width: number, height: number}): CellGrid {
   const grid: CellGrid = [];
   for (let y = 0; y < size.height; y++) {
     grid.push([]);
@@ -82,4 +91,4 @@ function getNeightbors(grid: CellGrid, x: number, y: number): MaybeCell[] {
   return neighbors;
 }
 
-export { generateGrid, Game, type Cell, type CellGrid, CellType };
+export { cellTypeToStr, generateGrid, Game, type Cell, type MaybeCell, type CellGrid, CellType };

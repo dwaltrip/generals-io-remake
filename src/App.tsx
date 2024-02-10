@@ -1,24 +1,16 @@
-import { generateGrid, CellType } from './generals/game';
 import './App.css'
 
-const grid = generateGrid({ width: 30, height: 30 });
-const prettyGrid = grid.map(row => {
-  return row.map(cell => {
-    if (!cell) return '.';
-    return cell.type === CellType.MOUNTAIN ? '#' : ' ';
-  }).join('');
-}).join('\n');
+import { exampleGrid } from './example-grid';
+import { GameBoard } from './game-board';
 
-console.log('--- grid ---\n');
-console.log(prettyGrid)
+const GRID = exampleGrid();
 
 function App() {
   return (
-    <>
-      <div>
-        Generals.io clone
-      </div>
-    </>
+    <div className='app'>
+      <p>Generals.io clone</p>
+      <GameBoard grid={GRID} />
+    </div>
   )
 }
 
