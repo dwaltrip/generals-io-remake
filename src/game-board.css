@@ -13,12 +13,12 @@ table.game-grid {
     border-spacing: 0;
 }
 
-td.cell {
+td.square {
     padding: 0;
 
 }
 
-td.cell > img {
+td.square > img {
     display: flex;
     height: 25px;
     width: 25px;

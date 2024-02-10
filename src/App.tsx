@@ -1,9 +1,9 @@
 import './App.css'
 
-import { exampleGrid } from './example-grid';
+import { generateGrid } from './generals/generate-grid';
 import { GameBoard } from './game-board';
 
-const GRID = exampleGrid();
+const GRID = generateGrid({ width: 30, height: 30 });
 
 function App() {
   return (

@@ -1,19 +1,19 @@
 import { useRef } from 'react';
 
 import mountainIcon from './assets/mountain.svg';
-import { CellGrid, CellType, MaybeCell, cellTypeToStr } from './generals/game';
+import { GameGrid, SquareType, Square } from './generals/types';
 
 import './game-board.css';
 
 type GameBoardProps = {
-  grid: CellGrid;
+  grid: GameGrid,
 }
 
-function CellView({ cell } : { cell: MaybeCell }) {
-  const className = `cell ${cell ? cellTypeToStr(cell.type) : ''}`;
+function SquareView({ square } : { square: Square }) {
+  const className = `square ${square && square.type.toString().toLowerCase()}`;
   return (
     <td className={className}>
-      {(cell && cell.type === CellType.MOUNTAIN) &&
+      {(square && square.type === SquareType.MOUNTAIN) &&
         <img src={mountainIcon} />
       }
     </td>
@@ -23,13 +23,13 @@ function CellView({ cell } : { cell: MaybeCell }) {
 function GameBoard({ grid }: GameBoardProps) {
   const containerRef = useRef(null);
   return (
-    <div className="game-grid-container" ref={containerRef}>
+    <div className='game-grid-container' ref={containerRef}>
       <table className='game-grid'>
         <tbody>
           {grid.map((row, y) => (
             <tr key={y}>
-              {row.map((cell, x) => (
-                <CellView key={x} cell={cell}/>
+              {row.map((square, x) => (
+                <SquareView key={x} square={square}/>
               ))}
             </tr>
           ))}
