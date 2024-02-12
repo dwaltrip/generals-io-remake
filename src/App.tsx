@@ -1,7 +1,7 @@
-import './App.css'
+import '@/App.css'
 
-import { generateGrid } from './generals/generate-grid';
-import { GameBoard } from './game-board';
+import { generateGrid } from '@/generals/generate-grid';
+import { GameBoard } from '@/generals/ui/grid';
 
 const GRID = generateGrid({ width: 30, height: 30 });
 

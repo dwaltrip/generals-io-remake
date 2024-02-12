@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 
-import mountainIcon from './assets/mountain.svg';
-import { GameGrid, SquareType, Square } from './generals/types';
+import mountainIcon from '@/assets/mountain.svg';
+import { GameGrid, SquareType, Square } from '@/generals/types';
 
-import './game-board.css';
+import '@/generals/ui/grid.css';
 
 type GameBoardProps = {
   grid: GameGrid,
