@@ -1,7 +1,7 @@
 import mountainIcon from '@/assets/mountain.svg';
 import generalIcon from '@/assets/crown.png';
 
-import { SquareType, Square } from '@/generals/types';
+import { SquareType, Square, PlayerSquare } from '@/generals/types';
 
 import '@/generals/ui/game.css';
 import { Game } from '@/generals/game';
@@ -34,13 +34,15 @@ function GameBoard({ board }: { board: Board }) {
   );
 }
 
-const ArmyCount = () => <span className='army-count'>5</span>;
+function ArmyCount({ count } : { count: number }){
+  return <span className='army-count'>{count}</span>;
+}
 
-function General() {
+function General({ square } : { square: PlayerSquare }) {
   return (
     <div className='general-icon'>
       <img className='general-img' src={generalIcon} /> 
-      <ArmyCount />
+      <ArmyCount count={square.units} />
     </div>
   );
 }
@@ -53,7 +55,9 @@ function SquareView({ square } : { square: Square }) {
   return (
     <td className={className}>
       {square.type === SquareType.MOUNTAIN && <img src={mountainIcon} />}
-      {square.type === SquareType.GENERAL && <General />}
+      {square.type === SquareType.GENERAL && 
+        <General square={square as PlayerSquare} />
+      }
     </td>
   );
 }

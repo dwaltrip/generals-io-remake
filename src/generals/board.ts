@@ -1,4 +1,4 @@
-import { GameGrid, Coord, Size2d, Square, Movement, SquareType } from '@/generals/types';
+import { GameGrid, Coord, Size2d, Square, Movement, SquareType, PlayerSquare } from '@/generals/types';
 
 import { Player } from '@/generals/game';
 import { generateGrid, addPlayerGenerals } from '@/generals/generate-grid';
@@ -7,7 +7,7 @@ import { assert } from '@/utils/assert';
 class Board {
   grid: GameGrid;
   players: Player[];
-  generals = new Map<Player, Coord>();
+  generals = new Map<Player, PlayerSquare>();
 
   constructor(grid: GameGrid, players: Player[]) {
     this.grid = grid;
@@ -16,7 +16,7 @@ class Board {
     const coords = addPlayerGenerals(this.grid, this.players.length);
     assert(players.length === coords.length, 'Number of players and generals must match');
     for (let i = 0; i < players.length; i++) {
-      this.generals.set(players[i], coords[i]);
+      this.generals.set(players[i], this.getSquare(coords[i]) as PlayerSquare);
     }
 
     validateGrid(grid)

@@ -1,4 +1,4 @@
-import { SquareType, Square, GameGrid, Coord, Size2d } from './types';
+import { SquareType, Square, GameGrid, Coord, Size2d, PlayerSquare } from './types';
 
 // ----------------------------------------------------------------------------
 
@@ -73,7 +73,9 @@ function addPlayerGenerals(grid: GameGrid, numPlayers: number): Coord[] {
       coord = randCoord();
     }
 
-    grid[coord.y][coord.x].type = SquareType.GENERAL;
+    const square = grid[coord.y][coord.x] as PlayerSquare;
+    square.type = SquareType.GENERAL;
+    square.units = 1;
     generals.push(coord);
   }
 
