@@ -59,12 +59,14 @@ enum PlayerColor {
 
 class Player {
   id: number;
+  username: string;
   color: PlayerColor;
 
-  constructor(id: number, color: PlayerColor) {
+  constructor(id: number, username: string, color: PlayerColor) {
     this.id = id;
+    this.username = username;
     this.color = color;
   }
 }
 
-export { Game };
+export { Game, Player, PlayerColor };
