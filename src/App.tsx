@@ -1,6 +1,6 @@
 import '@/App.css'
 
-import { generateGrid } from '@/generals/generate-grid';
+import { generateGrid, addPlayerGenerals } from '@/generals/generate-grid';
 import { Board } from './generals/board';
 import { Game, Player, PlayerColor } from '@/generals/game';
 
@@ -14,6 +14,7 @@ function makeDummyGame() {
 
   const GRID = generateGrid({ width: 30, height: 30 });
   const game = new Game(players, new Board(GRID));
+  const generals = addPlayerGenerals(game.board.grid, players.length);
 
   const moves = [
     { player: players[0], source: { x: 0, y: 0 }, direction: 'RIGHT' },

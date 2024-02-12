@@ -1,4 +1,6 @@
-import { SquareType, Square, GameGrid } from './types';
+import { SquareType, Square, GameGrid, Coord } from './types';
+
+// ----------------------------------------------------------------------------
 
 function generateGrid(size: { width: number, height: number}): GameGrid {
   const grid: any[][] = [];
@@ -17,6 +19,8 @@ function generateGrid(size: { width: number, height: number}): GameGrid {
   }
   return grid;
 }
+
+// ----------------------------------------------------------------------------
 
 function generateCell(grid: GameGrid, x: number, y: number): Square {
   const nearbyMountains: number = getNeightbors(grid, x, y)
@@ -54,4 +58,29 @@ function getNeightbors(grid: GameGrid, x: number, y: number): Square[] {
   return neighbors;
 }
 
-export { generateGrid };
+// ----------------------------------------------------------------------------
+
+function addPlayerGenerals(grid: GameGrid, numPlayers: number): Coord[] {
+  const generals = [];
+
+  const randCoord = (): Coord => ({
+    x: Math.floor(Math.random() * grid[0].length),
+    y: Math.floor(Math.random() * grid.length),
+  });
+
+  for (let i = 0; i < numPlayers; i++) {
+    let coord = randCoord();
+    while (grid[coord.y][coord.x].type !== SquareType.BLANK) {
+      coord = randCoord();
+    }
+
+    grid[coord.y][coord.x].type = SquareType.GENERAL;
+    generals.push(coord);
+  }
+
+  return generals;
+}
+
+// ----------------------------------------------------------------------------
+
+export { generateGrid, addPlayerGenerals };

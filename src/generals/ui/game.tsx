@@ -1,7 +1,7 @@
 import mountainIcon from '@/assets/mountain.svg';
 import { SquareType, Square } from '@/generals/types';
 
-import '@/generals/ui/grid.css';
+import '@/generals/ui/game.css';
 import { Game } from '@/generals/game';
 import { Board } from '@/generals/board';
 
@@ -32,13 +32,21 @@ function GameBoard({ board }: { board: Board }) {
   );
 }
 
+function General() {
+  return (
+    <div className='general-icon'>1</div>
+  );
+}
+
 function SquareView({ square } : { square: Square }) {
   const className = `square ${square && square.type.toString().toLowerCase()}`;
+  if (!square) {
+    throw new Error('Square is null');
+  }
   return (
     <td className={className}>
-      {(square && square.type === SquareType.MOUNTAIN) &&
-        <img src={mountainIcon} />
-      }
+      {square.type === SquareType.MOUNTAIN && <img src={mountainIcon} />}
+      {square.type === SquareType.GENERAL && <General />}
     </td>
   );
 }

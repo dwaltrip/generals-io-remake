@@ -1,0 +1,6 @@
+    
+div, span, p, h1, h2, h3, h4, h5, h6, ul, ol, li, a, img, input, button, form, label, select, textarea {
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+}
