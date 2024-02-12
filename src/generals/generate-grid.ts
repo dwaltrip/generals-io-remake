@@ -1,8 +1,8 @@
-import { SquareType, Square, GameGrid, Coord } from './types';
+import { SquareType, Square, GameGrid, Coord, Size2d } from './types';
 
 // ----------------------------------------------------------------------------
 
-function generateGrid(size: { width: number, height: number}): GameGrid {
+function generateGrid(size: Size2d): GameGrid {
   const grid: any[][] = [];
 
   for (let y = 0; y < size.height; y++) {
@@ -36,8 +36,7 @@ function generateCell(grid: GameGrid, x: number, y: number): Square {
   const mountainProb = probMap.get(nearbyMountains) || defaultProb;
   const isMountain = Math.random() < mountainProb;
   return {
-    x,
-    y,
+    coord: { x, y },
     type: isMountain ? SquareType.MOUNTAIN : SquareType.BLANK,
   };
 }

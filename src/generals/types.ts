@@ -1,4 +1,8 @@
 
+type Coord = { x: number; y: number; };
+
+type Size2d = { width: number; height: number; };
+
 enum PlayerSquareType {
   GENERAL = 'GENERAL',
   ARMY = 'ARMY',
@@ -27,8 +31,6 @@ interface PlayerSquare extends Square {
 
 type GameGrid = Square[][];
 
-type Coord = { x: number; y: number; };
-
 enum Movement {
   UP,
   DOWN,
@@ -37,12 +39,14 @@ enum Movement {
 }
 
 export {
+  type Coord,
+  type Size2d,
+
   PlayerSquareType,
   NeutralSquareType,
   SquareType,
   type Square,
   type PlayerSquare,
   type GameGrid,
-  type Coord,
   Movement,
 };

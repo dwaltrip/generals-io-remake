@@ -1,11 +1,22 @@
-import { GameGrid, Coord, Square } from "./types";
+import { GameGrid, Coord, Size2d, Square, Movement, SquareType } from '@/generals/types';
+
+import { Player } from '@/generals/game';
+import { generateGrid, addPlayerGenerals } from '@/generals/generate-grid';
 
 class Board {
   grid: GameGrid;
+  players: Player[];
 
-  constructor(grid: GameGrid) {
-    validateGrid(grid)
+  constructor(grid: GameGrid, players: Player[]) {
     this.grid = grid;
+    this.players = players;
+    validateGrid(grid)
+    addPlayerGenerals(this.grid, this.players.length);
+  }
+
+  static build(size: Size2d, players: Player[]) {
+    const grid = generateGrid(size);
+    return new Board(grid, players);
   }
 
   get width() {
@@ -14,6 +25,15 @@ class Board {
 
   get height() {
     return this.grid.length;
+  }
+
+  canMove(source: Coord, direction: Movement): boolean {
+    const destCoord = applyDirection(source, direction);
+    if (!this.isCoordValid(destCoord)) {
+      return false;
+    }
+    const dest = this.getSquare(destCoord);
+    return dest.type !== SquareType.MOUNTAIN;
   }
 
   getSquare(coord: Coord): Square {
@@ -27,6 +47,19 @@ class Board {
   isCoordValid(coord: Coord): boolean {
     const { x, y } = coord;
     return x >= 0 && x < this.width && y >= 0 && y < this.height;
+  }
+}
+
+function applyDirection(coord: Coord, direction: Movement): Coord {
+  switch (direction) {
+    case Movement.UP:
+      return { x: coord.x, y: coord.y - 1 };
+    case Movement.DOWN:
+      return { x: coord.x, y: coord.y + 1 };
+    case Movement.LEFT:
+      return { x: coord.x - 1, y: coord.y };
+    case Movement.RIGHT:
+      return { x: coord.x + 1, y: coord.y };
   }
 }
 
