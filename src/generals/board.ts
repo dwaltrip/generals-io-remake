@@ -2,16 +2,24 @@ import { GameGrid, Coord, Size2d, Square, Movement, SquareType } from '@/general
 
 import { Player } from '@/generals/game';
 import { generateGrid, addPlayerGenerals } from '@/generals/generate-grid';
+import { assert } from '@/utils/assert';
 
 class Board {
   grid: GameGrid;
   players: Player[];
+  generals = new Map<Player, Coord>();
 
   constructor(grid: GameGrid, players: Player[]) {
     this.grid = grid;
     this.players = players;
+
+    const coords = addPlayerGenerals(this.grid, this.players.length);
+    assert(players.length === coords.length, 'Number of players and generals must match');
+    for (let i = 0; i < players.length; i++) {
+      this.generals.set(players[i], coords[i]);
+    }
+
     validateGrid(grid)
-    addPlayerGenerals(this.grid, this.players.length);
   }
 
   static build(size: Size2d, players: Player[]) {
