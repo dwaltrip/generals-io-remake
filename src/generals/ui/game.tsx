@@ -1,4 +1,6 @@
 import mountainIcon from '@/assets/mountain.svg';
+import generalIcon from '@/assets/crown.png';
+
 import { SquareType, Square } from '@/generals/types';
 
 import '@/generals/ui/game.css';
@@ -32,9 +34,14 @@ function GameBoard({ board }: { board: Board }) {
   );
 }
 
+const ArmyCount = () => <span className='army-count'>5</span>;
+
 function General() {
   return (
-    <div className='general-icon'>1</div>
+    <div className='general-icon'>
+      <img className='general-img' src={generalIcon} /> 
+      <ArmyCount />
+    </div>
   );
 }
 
