@@ -1,3 +1,4 @@
+import { Player } from './game';
 import { SquareType, Square, GameGrid, Coord, Size2d, PlayerSquare } from './types';
 
 // ----------------------------------------------------------------------------
@@ -59,7 +60,7 @@ function getNeightbors(grid: GameGrid, x: number, y: number): Square[] {
 
 // ----------------------------------------------------------------------------
 
-function addPlayerGenerals(grid: GameGrid, numPlayers: number): Coord[] {
+function addPlayerGenerals(grid: GameGrid, players: Player[]): Coord[] {
   const generals = [];
 
   const randCoord = (): Coord => ({
@@ -67,13 +68,14 @@ function addPlayerGenerals(grid: GameGrid, numPlayers: number): Coord[] {
     y: Math.floor(Math.random() * grid.length),
   });
 
-  for (let i = 0; i < numPlayers; i++) {
+  for (let player of players) {
     let coord = randCoord();
     while (grid[coord.y][coord.x].type !== SquareType.BLANK) {
       coord = randCoord();
     }
 
     const square = grid[coord.y][coord.x] as PlayerSquare;
+    square.playerId = player.id;
     square.type = SquareType.GENERAL;
     square.units = 1;
     generals.push(coord);

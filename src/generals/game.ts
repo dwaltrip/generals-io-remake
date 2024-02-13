@@ -1,6 +1,8 @@
 import { ActionType, performAction } from './actions';
 import { Board } from './board';
 
+const TROOP_RECRUITMENT_TURN_INTERVAL = 5;
+
 // TODO: rename to Engine or something like that?
 class Game {
   players: Player[];
@@ -26,6 +28,12 @@ class Game {
     return player;
   }
 
+  forEachSquareForPlayer(player: Player, callback: (square: any) => void) {
+    for (let square of this.board.iterPlayerSquares(player)) {
+      callback(square);
+    }
+  }
+
   get turn() {
     return Math.floor(this.tickCounter / this.ticksPerSecond);
   }
@@ -34,10 +42,23 @@ class Game {
     return (this.tickCounter % this.ticksPerSecond) === 0;
   }
 
+  get isTroopRecruitmentTick() {
+    return (
+      this.turn > 0 &&
+      this.isTurnTick &&
+      (this.turn % TROOP_RECRUITMENT_TURN_INTERVAL) === 0
+    );
+  }
+
   tick() {
     this.tickCounter++;
+
     if (this.isTurnTick) {
       performAction(this, ActionType.GENERAL_PRODUCTION);
+    }
+
+    if (this.isTroopRecruitmentTick) {
+      performAction(this, ActionType.TROOP_RECRUITMENT);
     }
 
     this.onTickCallbacks.forEach(cb => cb(this.tickCounter));

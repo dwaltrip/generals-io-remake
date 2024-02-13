@@ -13,7 +13,7 @@ class Board {
     this.grid = grid;
     this.players = players;
 
-    const coords = addPlayerGenerals(this.grid, this.players.length);
+    const coords = addPlayerGenerals(this.grid, this.players);
     assert(players.length === coords.length, 'Number of players and generals must match');
     for (let i = 0; i < players.length; i++) {
       this.generals.set(players[i], this.getSquare(coords[i]) as PlayerSquare);
@@ -33,6 +33,22 @@ class Board {
 
   get height() {
     return this.grid.length;
+  }
+
+  *iterSquares(): IterableIterator<Square> {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) {
+        yield this.grid[y][x];
+      }
+    }
+  }
+
+  *iterPlayerSquares(player: Player): IterableIterator<PlayerSquare> {
+    for (let square of this.iterSquares()) {
+      if ('playerId' in square && square.playerId === player.id) {
+        yield square as PlayerSquare;
+      }
+    }
   }
 
   canMove(source: Coord, direction: Movement): boolean {
