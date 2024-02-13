@@ -13,7 +13,7 @@ function produceUnitsOnGenerals(game: Game) {
     square.units += 1;
   });
   const generals = new Array(...game.board.generals.values());
-  console.log('General counts:', generals.map(g => g.units));
+  // console.log('General counts:', generals.map(g => g.units));
 }
 
 function performAction(game: Game, action: ActionType) {
