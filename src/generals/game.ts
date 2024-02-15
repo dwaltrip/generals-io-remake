@@ -80,6 +80,11 @@ enum PlayerColor {
   SILVER = 'SILVER',
 }
 
+const ColorMap = new Map([
+  [PlayerColor.RED, '#e33030'],
+  [PlayerColor.BLUE, '#308ee3'],
+]);
+
 class Player {
   id: number;
   username: string;
@@ -92,4 +97,8 @@ class Player {
   }
 }
 
-export { Game, Player, PlayerColor };
+function getPlayerColorInHex(player: Player): string {
+  return ColorMap.get(player.color) || '#ddd';
+}
+
+export { Game, Player, PlayerColor, getPlayerColorInHex };

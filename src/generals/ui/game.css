@@ -24,7 +24,8 @@ td.square img {
     max-width: 25px;
 }
 
-.general-icon {
+/* .general-icon { */
+.player-square {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -41,10 +42,6 @@ td.square img {
     /* position: absolute; */
     height: 23px;
     width: 23px;
-}
-
-td.square.general {
-    background-color: #f0ab4f;
 }
 
 span.army-count {

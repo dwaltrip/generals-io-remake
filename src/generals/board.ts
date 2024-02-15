@@ -3,6 +3,7 @@ import { GameGrid, Coord, Size2d, Square, Movement, SquareType, PlayerSquare } f
 import { Player } from '@/generals/game';
 import { generateGrid, addPlayerGenerals } from '@/generals/generate-grid';
 import { assert } from '@/utils/assert';
+import { isPlayerSquare } from './square';
 
 class Board {
   grid: GameGrid;
@@ -13,10 +14,10 @@ class Board {
     this.grid = grid;
     this.players = players;
 
-    const coords = addPlayerGenerals(this.grid, this.players);
-    assert(players.length === coords.length, 'Number of players and generals must match');
+    const generals = addPlayerGenerals(this.grid, this.players);
+    assert(players.length === generals.length, 'Number of players and generals must match');
     for (let i = 0; i < players.length; i++) {
-      this.generals.set(players[i], this.getSquare(coords[i]) as PlayerSquare);
+      this.generals.set(players[i], generals[i]);
     }
 
     validateGrid(grid)
@@ -45,8 +46,8 @@ class Board {
 
   *iterPlayerSquares(player: Player): IterableIterator<PlayerSquare> {
     for (let square of this.iterSquares()) {
-      if ('playerId' in square && square.playerId === player.id) {
-        yield square as PlayerSquare;
+      if (isPlayerSquare(square) && square.playerId === player.id) {
+        yield square;
       }
     }
   }
@@ -60,10 +61,12 @@ class Board {
     return dest.type !== SquareType.MOUNTAIN;
   }
 
-  getSquare(coord: Coord): Square {
-    if (!this.isCoordValid(coord)) {
-      throw new Error('Coord is not valid');
+  getSquare(coord: Coord, movement?: Movement): Square {
+    if (movement !== undefined) {
+      coord = applyDirection(coord, movement);
     }
+    assert(this.isCoordValid(coord), 'Coord is not valid');
+
     const { x, y } = coord;
     return this.grid[y][x];
   }
@@ -71,6 +74,12 @@ class Board {
   isCoordValid(coord: Coord): boolean {
     const { x, y } = coord;
     return x >= 0 && x < this.width && y >= 0 && y < this.height;
+  }
+
+  replaceSquare(coord: Coord, square: Square) {
+    assert(this.isCoordValid(coord), 'Coord is not valid');
+    const { x, y } = coord;
+    this.grid[y][x] = square;
   }
 }
 
@@ -99,4 +108,4 @@ function validateGrid(grid: GameGrid) {
   }
 }
 
-export { Board };
+export { Board, applyDirection };

@@ -1,13 +1,14 @@
 import '@/App.css'
 
-import { Board } from './generals/board';
+import { Board, applyDirection } from './generals/board';
 import { Game, Player, PlayerColor } from '@/generals/game';
 
 import { GameUI } from '@/generals/ui/game';
 import { ActionType, performAction } from './generals/actions';
-import { Movement } from './generals/types';
+import { Coord, Movement, Square } from './generals/types';
 import { useEffect, useRef, useState } from 'react';
 import { GameClock } from './generals/game-clock';
+import { prettyPrintGrid } from './generals/utils';
 
 const TICKS_PER_SECOND = 2;
 
@@ -22,28 +23,34 @@ function makeDummyGame() {
   const clock = new GameClock(game, Math.floor(1000 / TICKS_PER_SECOND));
   clock.start();
 
-  // const makeMove = (player: Player, x: number, y: number, dir: Movement) => {
-  //   return { type: ActionType.MOVE, args: { player, source: { x, y }, dir } };
-  // };
-  // const moveP1 = (...args) => makeMove(players[0], ...args);
+  const makeMove = (x: number, y: number, direction: Movement) => {
+    return { type: ActionType.MOVE, args: { source: { x, y }, direction } };
+  };
 
-  const actions = [
-    { type: ActionType.GENERAL_PRODUCTION },
-    { type: ActionType.GENERAL_PRODUCTION },
-    { type: ActionType.GENERAL_PRODUCTION },
-    // moveP1(0, 0, Movement.RIGHT),
-    // moveP1(0, 1, Movement.RIGHT),
-    // moveP1(0, 2, Movement.RIGHT),
-  ];
-  
-  // window.setInterval(() => {
-  //   const action = actions.shift();
-  //   if (action) {
-  //     console.log('Performing action', action.type)
-  //     performAction(game, action.type);
-  //   }
-  //   render();
-  // }, 1000);
+  function createMovementChain(start: Coord, moves: Movement[]): { source: Coord, direction: Movement }[] {
+    const chain = [];
+    let current = start;
+    for (let move of moves) {
+      chain.push({ source: current, direction: move });
+      current = applyDirection(current, move);
+    }
+    return chain;
+  }
+
+  const generalP1 = game.board.generals.get(players[0])!;
+  const { UP, DOWN, LEFT, RIGHT } = Movement;
+
+  const actions = createMovementChain(generalP1.coord, [
+    DOWN, DOWN, RIGHT, RIGHT,
+    UP, UP, UP, UP, LEFT, LEFT,
+  ]).map((actionArg => ({ type: ActionType.MOVE, args: actionArg })));
+
+  window.setInterval(() => {
+    const action = actions.shift();
+    if (action) {
+      performAction(game, action.type, action.args);
+    }
+  }, 500);
 
   return game;
 }

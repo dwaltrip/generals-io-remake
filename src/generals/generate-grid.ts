@@ -38,7 +38,8 @@ function generateCell(grid: GameGrid, x: number, y: number): Square {
   const isMountain = Math.random() < mountainProb;
   return {
     coord: { x, y },
-    type: isMountain ? SquareType.MOUNTAIN : SquareType.BLANK,
+    // type: isMountain ? SquareType.MOUNTAIN : SquareType.BLANK,
+    type: SquareType.BLANK,
   };
 }
 
@@ -60,7 +61,7 @@ function getNeightbors(grid: GameGrid, x: number, y: number): Square[] {
 
 // ----------------------------------------------------------------------------
 
-function addPlayerGenerals(grid: GameGrid, players: Player[]): Coord[] {
+function addPlayerGenerals(grid: GameGrid, players: Player[]): PlayerSquare[] {
   const generals = [];
 
   const randCoord = (): Coord => ({
@@ -74,11 +75,16 @@ function addPlayerGenerals(grid: GameGrid, players: Player[]): Coord[] {
       coord = randCoord();
     }
 
-    const square = grid[coord.y][coord.x] as PlayerSquare;
-    square.playerId = player.id;
-    square.type = SquareType.GENERAL;
-    square.units = 1;
-    generals.push(coord);
+    const square = grid[coord.y][coord.x];
+    const generalSquare = {
+      ...square,
+      type: SquareType.GENERAL,
+      playerId: player.id,
+      // units: 1,
+      units: 20,
+    }
+    grid[coord.y][coord.x] = generalSquare;
+    generals.push(generalSquare);
   }
 
   return generals;
