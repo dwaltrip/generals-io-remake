@@ -1,11 +1,11 @@
-import { Square, PlayerSquareType, PlayerSquare } from "./types";
+import { Square, PlayerSquareType, PlayerSquare, NeutralSquare, NeutralSquareType } from "./types";
 
 function isPlayerSquare(square: Square): square is PlayerSquare {
-  return (
-    square.type === PlayerSquareType.PLAYER_CITY ||
-    square.type === PlayerSquareType.GENERAL ||
-    square.type === PlayerSquareType.ARMY
-  );
+  return square.type in PlayerSquareType;
 }
 
-export { isPlayerSquare };
+function isNeutralSquare(square: Square): square is NeutralSquare {
+  return square.type in NeutralSquareType;
+}
+
+export { isPlayerSquare, isNeutralSquare };

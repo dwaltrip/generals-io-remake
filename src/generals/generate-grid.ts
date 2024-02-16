@@ -1,4 +1,5 @@
 import { Player } from './game';
+import { isNeutralSquare } from './square';
 import { SquareType, Square, GameGrid, Coord, Size2d, PlayerSquare } from './types';
 
 // ----------------------------------------------------------------------------
@@ -76,18 +77,25 @@ function addPlayerGenerals(grid: GameGrid, players: Player[]): PlayerSquare[] {
     }
 
     const square = grid[coord.y][coord.x];
-    const generalSquare = {
-      ...square,
-      type: SquareType.GENERAL,
-      playerId: player.id,
-      // units: 1,
-      units: 20,
-    }
+    const generalSquare = convertToGeneral(square, player);
     grid[coord.y][coord.x] = generalSquare;
     generals.push(generalSquare);
   }
 
   return generals;
+}
+
+function convertToGeneral(square: Square, player: Player): PlayerSquare {
+  if (!isNeutralSquare(square)) {
+    throw new Error('Cannot convert non-neutral square to general');
+  }
+  return {
+    ...square,
+    type: SquareType.GENERAL,
+    playerId: player.id,
+    // units: 1,
+    units: 20,
+  };
 }
 
 // ----------------------------------------------------------------------------

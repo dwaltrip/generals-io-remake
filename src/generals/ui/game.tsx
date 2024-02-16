@@ -1,7 +1,7 @@
 import mountainIcon from '@/assets/mountain.svg';
 import generalIcon from '@/assets/crown.png';
 
-import { SquareType, Square, PlayerSquare } from '@/generals/types';
+import { SquareType, Square, PlayerSquare, PlayerSquareType } from '@/generals/types';
 
 import '@/generals/ui/game.css';
 import { Game, Player, getPlayerColorInHex } from '@/generals/game';
@@ -84,10 +84,14 @@ function PlayerSquareView({ square, player } : { square: PlayerSquare, player: P
   }
   return (
     <td className={className}>
-      {square.type === SquareType.GENERAL && 
+      {square.type === PlayerSquareType.GENERAL && 
         <General square={square} player={player}/>
       }
-      {square.type === SquareType.ARMY &&
+      {square.type === PlayerSquareType.ARMY &&
+        <ArmySquare square={square} player={player}/>
+      }
+      {/* TODO: Implement view for PLAYER_CITY */}
+      {square.type === PlayerSquareType.PLAYER_CITY &&
         <ArmySquare square={square} player={player}/>
       }
     </td>

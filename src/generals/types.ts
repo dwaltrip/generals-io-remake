@@ -18,16 +18,21 @@ enum NeutralSquareType {
 const SquareType = { ...PlayerSquareType, ...NeutralSquareType };
 type SquareType = PlayerSquareType | NeutralSquareType;
 
-interface Square {
-  type: SquareType;
+interface _BaseSquare {
   coord: Coord;
 }
 
-interface PlayerSquare extends Square {
+interface NeutralSquare extends _BaseSquare {
+  type: NeutralSquareType;
+}
+
+interface PlayerSquare extends _BaseSquare {
   type: PlayerSquareType;
   playerId: number;
   units: number;
 }
+
+type Square = NeutralSquare | PlayerSquare;
 
 type GameGrid = Square[][];
 
@@ -42,11 +47,14 @@ export {
   type Coord,
   type Size2d,
 
-  PlayerSquareType,
   NeutralSquareType,
+  PlayerSquareType,
   SquareType,
-  type Square,
+
+  type NeutralSquare,
   type PlayerSquare,
+  type Square,
+
   type GameGrid,
   Movement,
 };
