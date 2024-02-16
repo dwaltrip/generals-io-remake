@@ -20,37 +20,43 @@ function makeDummyGame() {
 
   const size = { width: 30, height: 30 };
   const game = new Game(players, Board.build(size, players), TICKS_PER_SECOND);
+  
   const clock = new GameClock(game, Math.floor(1000 / TICKS_PER_SECOND));
   clock.start();
 
-  const makeMove = (x: number, y: number, direction: Movement) => {
-    return { type: ActionType.MOVE, args: { source: { x, y }, direction } };
-  };
-
-  function createMovementChain(start: Coord, moves: Movement[]): { source: Coord, direction: Movement }[] {
+  type MoveAction = { type: ActionType.MOVE, args: { source: Coord, direction: Movement } };
+  function createMovementChain(start: Coord, moves: Movement[]): MoveAction[] {
     const chain = [];
     let current = start;
     for (let move of moves) {
       chain.push({ source: current, direction: move });
       current = applyDirection(current, move);
     }
-    return chain;
+    return chain.map((args => ({ type: ActionType.MOVE, args })));
   }
 
   const generalP1 = game.board.generals.get(players[0])!;
+  const generalP2 = game.board.generals.get(players[1])!;
   const { UP, DOWN, LEFT, RIGHT } = Movement;
 
-  const actions = createMovementChain(generalP1.coord, [
-    DOWN, DOWN, RIGHT, RIGHT,
-    UP, UP, UP, UP, LEFT, LEFT,
-  ]).map((actionArg => ({ type: ActionType.MOVE, args: actionArg })));
+  const actions1 = createMovementChain(
+    generalP1.coord,
+    // [DOWN, DOWN, RIGHT, RIGHT, RIGHT, RIGHT],
+    [DOWN, DOWN, RIGHT, RIGHT, UP, UP, LEFT, LEFT],
+  );
+  const actions2 = createMovementChain(
+    generalP2.coord,
+    [DOWN, DOWN, DOWN, DOWN],
+  );
 
   window.setInterval(() => {
-    const action = actions.shift();
-    if (action) {
-      performAction(game, action.type, action.args);
+    const actions = [actions1.shift(), actions2.shift()];
+    for (let action of actions) {
+      if (action) {
+        performAction(game, action.type, action.args);
+      }
     }
-  }, 500);
+  }, 1500);
 
   return game;
 }

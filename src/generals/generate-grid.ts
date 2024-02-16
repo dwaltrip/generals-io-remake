@@ -63,6 +63,14 @@ function getNeightbors(grid: GameGrid, x: number, y: number): Square[] {
 // ----------------------------------------------------------------------------
 
 function addPlayerGenerals(grid: GameGrid, players: Player[]): PlayerSquare[] {
+  const s1 = grid[4][4];
+  const s2 = grid[4][6];
+  const g1 = convertToGeneral(s1, players[0]);
+  const g2 = convertToGeneral(s2, players[1]);
+  grid[s1.coord.y][s1.coord.x] = g1;
+  grid[s2.coord.y][s2.coord.x] = g2;
+  return [g1, g2];
+
   const generals = [];
 
   const randCoord = (): Coord => ({

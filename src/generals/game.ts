@@ -1,7 +1,7 @@
 import { ActionType, performAction } from './actions';
 import { Board } from './board';
 
-const TROOP_RECRUITMENT_TURN_INTERVAL = 5;
+const TROOP_RECRUITMENT_TURN_INTERVAL = 100;
 
 // TODO: rename to Engine or something like that?
 class Game {
