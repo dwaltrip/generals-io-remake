@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from 'react';
 import { GameClock } from './generals/game-clock';
 import { prettyPrintGrid } from './generals/utils';
 
-const TICKS_PER_SECOND = 2;
+const TICKS_PER_TURN = 2;
 
 function makeDummyGame() {
   const players = [
@@ -19,9 +19,18 @@ function makeDummyGame() {
   ];
 
   const size = { width: 30, height: 30 };
-  const game = new Game(players, Board.build(size, players), TICKS_PER_SECOND);
+  const game = new Game(
+    players,
+    // Board.buildWithRandomGenerals(size, players),
+    Board.buildWithGenerals(size, players, new Map([
+      [players[0], { x: 4, y: 4 }],
+      [players[1], { x: 6, y: 4 }],
+    ])),
+    TICKS_PER_TURN,
+  );
+  game.generals.forEach(general => { general.units = 20; });
   
-  const clock = new GameClock(game, Math.floor(1000 / TICKS_PER_SECOND));
+  const clock = new GameClock(game, Math.floor(1000 / TICKS_PER_TURN));
   clock.start();
 
   type MoveAction = { type: ActionType.MOVE, args: { source: Coord, direction: Movement } };
@@ -56,7 +65,7 @@ function makeDummyGame() {
         performAction(game, action.type, action.args);
       }
     }
-  }, 1500);
+  }, 500);
 
   return game;
 }

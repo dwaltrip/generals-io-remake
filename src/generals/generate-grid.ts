@@ -6,17 +6,21 @@ import { SquareType, Square, GameGrid, Coord, Size2d, PlayerSquare } from './typ
 
 function generateGrid(size: Size2d): GameGrid {
   const grid: any[][] = [];
-
   for (let y = 0; y < size.height; y++) {
     grid.push([]);
     for (let x = 0; x < size.width; x++) {
-      grid[y].push(null);
+      grid[y].push(createBlankCell({ x, y }));
     }
   }
+  return grid;
+}
+
+function generateGridWithRandomMountains(size: Size2d): GameGrid {
+  const grid = generateGrid(size);
 
   for (let y = 0; y < size.height; y++) {
     for (let x = 0; x < size.width; x++) {
-      grid[y][x] = generateCell(grid, x, y);
+      grid[y][x] = mountainOrBlank(grid, x, y);
     }
   }
   return grid;
@@ -24,7 +28,12 @@ function generateGrid(size: Size2d): GameGrid {
 
 // ----------------------------------------------------------------------------
 
-function generateCell(grid: GameGrid, x: number, y: number): Square {
+function createBlankCell(coord: Coord): Square {
+  return { coord, type: SquareType.BLANK };
+}
+
+// TODO: Think about how to make this more configurable
+function mountainOrBlank(grid: GameGrid, x: number, y: number): Square {
   const nearbyMountains: number = getNeightbors(grid, x, y)
     .filter(cell => cell && cell.type === SquareType.MOUNTAIN).length;
 
@@ -39,8 +48,7 @@ function generateCell(grid: GameGrid, x: number, y: number): Square {
   const isMountain = Math.random() < mountainProb;
   return {
     coord: { x, y },
-    // type: isMountain ? SquareType.MOUNTAIN : SquareType.BLANK,
-    type: SquareType.BLANK,
+    type: isMountain ? SquareType.MOUNTAIN : SquareType.BLANK,
   };
 }
 
@@ -62,15 +70,18 @@ function getNeightbors(grid: GameGrid, x: number, y: number): Square[] {
 
 // ----------------------------------------------------------------------------
 
-function addPlayerGenerals(grid: GameGrid, players: Player[]): PlayerSquare[] {
-  const s1 = grid[4][4];
-  const s2 = grid[4][6];
-  const g1 = convertToGeneral(s1, players[0]);
-  const g2 = convertToGeneral(s2, players[1]);
-  grid[s1.coord.y][s1.coord.x] = g1;
-  grid[s2.coord.y][s2.coord.x] = g2;
-  return [g1, g2];
+function addGenerals(grid: GameGrid, generals: Map<Player, Coord>): PlayerSquare[] {
+  const playerSquares = [];
+  for (let [player, coord] of generals) {
+    const square = grid[coord.y][coord.x];
+    const generalSquare = convertToGeneral(square, player);
+    grid[coord.y][coord.x] = generalSquare;
+    playerSquares.push(generalSquare);
+  }
+  return playerSquares;
+}
 
+function addRandomGenerals(grid: GameGrid, players: Player[]): PlayerSquare[] {
   const generals = [];
 
   const randCoord = (): Coord => ({
@@ -101,11 +112,10 @@ function convertToGeneral(square: Square, player: Player): PlayerSquare {
     ...square,
     type: SquareType.GENERAL,
     playerId: player.id,
-    // units: 1,
-    units: 20,
+    units: 1,
   };
 }
 
 // ----------------------------------------------------------------------------
 
-export { generateGrid, addPlayerGenerals };
+export { generateGrid, generateGridWithRandomMountains, addGenerals, addRandomGenerals };

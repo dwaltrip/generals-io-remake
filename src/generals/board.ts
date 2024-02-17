@@ -1,7 +1,7 @@
 import { GameGrid, Coord, Size2d, Square, Movement, SquareType, PlayerSquare } from '@/generals/types';
 
 import { Player } from '@/generals/game';
-import { generateGrid, addPlayerGenerals } from '@/generals/generate-grid';
+import { generateGrid, addGenerals, addRandomGenerals } from '@/generals/generate-grid';
 import { assert } from '@/utils/assert';
 import { isPlayerSquare } from './square';
 
@@ -13,19 +13,33 @@ class Board {
   constructor(grid: GameGrid, players: Player[]) {
     this.grid = grid;
     this.players = players;
-
-    const generals = addPlayerGenerals(this.grid, this.players);
-    assert(players.length === generals.length, 'Number of players and generals must match');
-    for (let i = 0; i < players.length; i++) {
-      this.generals.set(players[i], generals[i]);
-    }
-
     validateGrid(grid)
   }
 
   static build(size: Size2d, players: Player[]) {
     const grid = generateGrid(size);
     return new Board(grid, players);
+  }
+
+  static buildWithGenerals(size: Size2d, players: Player[], generals: Map<Player, Coord>) {
+    const grid = generateGrid(size);
+    const board = new Board(grid, players);
+    board._setGenerals(players, addGenerals(grid, generals));
+    return board;
+  }
+
+  static buildWithRandomGenerals(size: Size2d, players: Player[]) {
+    const grid = generateGrid(size);
+    const board = new Board(grid, players);
+    board._setGenerals(players, addRandomGenerals(grid, players));
+    return board;
+  }
+
+  private _setGenerals(players: Player[], generals: PlayerSquare[]) {
+    assert(players.length === generals.length, 'Number of players and generals must match');
+    for (let i = 0; i < players.length; i++) {
+      this.generals.set(players[i], generals[i]);
+    }
   }
 
   get width() {

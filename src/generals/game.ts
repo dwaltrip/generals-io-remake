@@ -7,17 +7,17 @@ const TROOP_RECRUITMENT_TURN_INTERVAL = 100;
 class Game {
   players: Player[];
   board: Board;
-  ticksPerSecond: number;
+  ticksPerTurn: number;
 
   private tickCounter: number = 0;
   private playersById: Map<number, Player>;
   private onTickCallbacks: ((tick: number) => void)[] = [];
 
-  constructor(players: Player[], board: Board, ticksPerSecond: number) {
+  constructor(players: Player[], board: Board, ticksPerTurn: number) {
     this.players = players;
     this.playersById = new Map(players.map(p => [p.id, p]));
     this.board = board;
-    this.ticksPerSecond = ticksPerSecond
+    this.ticksPerTurn = ticksPerTurn;
   }
 
   getPlayer(id: number): Player {
@@ -34,12 +34,16 @@ class Game {
     }
   }
 
+  get generals() {
+    return this.board.generals;
+  }
+
   get turn() {
-    return Math.floor(this.tickCounter / this.ticksPerSecond);
+    return Math.floor(this.tickCounter / this.ticksPerTurn);
   }
 
   get isTurnTick() {
-    return (this.tickCounter % this.ticksPerSecond) === 0;
+    return (this.tickCounter % this.ticksPerTurn) === 0;
   }
 
   get isTroopRecruitmentTick() {
