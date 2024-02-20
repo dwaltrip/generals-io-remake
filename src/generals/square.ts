@@ -8,4 +8,8 @@ function isNeutralSquare(square: Square): square is NeutralSquare {
   return square.type in NeutralSquareType;
 }
 
-export { isPlayerSquare, isNeutralSquare };
+function isBlankSquare(square: Square): boolean {
+  return square.type === NeutralSquareType.BLANK;
+}
+
+export { isPlayerSquare, isNeutralSquare, isBlankSquare };

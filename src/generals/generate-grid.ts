@@ -32,6 +32,15 @@ function createBlankCell(coord: Coord): Square {
   return { coord, type: SquareType.BLANK };
 }
 
+function createArmyCell(coord: Coord, playerId: number, units: number): PlayerSquare {
+  return {
+    coord,
+    type: SquareType.ARMY,
+    playerId,
+    units,
+  }
+}
+
 // TODO: Think about how to make this more configurable
 function mountainOrBlank(grid: GameGrid, x: number, y: number): Square {
   const nearbyMountains: number = getNeightbors(grid, x, y)
@@ -118,4 +127,11 @@ function convertToGeneral(square: Square, player: Player): PlayerSquare {
 
 // ----------------------------------------------------------------------------
 
-export { generateBlankGrid, generateGridWithRandomMountains, addGenerals, addRandomGenerals };
+export {
+  generateBlankGrid,
+  generateGridWithRandomMountains,
+  createBlankCell,
+  createArmyCell,
+  addGenerals,
+  addRandomGenerals,
+}

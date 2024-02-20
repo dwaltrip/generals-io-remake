@@ -2,10 +2,10 @@ import mountainIcon from '@/assets/mountain.svg';
 import generalIcon from '@/assets/crown.png';
 
 import { SquareType, Square, PlayerSquare, PlayerSquareType } from '@/generals/types';
+import { Game, Player, getPlayerColorInHex } from '@/generals/game';
+import { isPlayerSquare } from '@/generals/square';
 
 import '@/generals/ui/game.css';
-import { Game, Player, getPlayerColorInHex } from '@/generals/game';
-import { isPlayerSquare } from '../square';
 
 function GameUI({ game }: { game: Game }) {
   return (

@@ -7,4 +7,8 @@ function repeat(n: number, fn: () => void): void {
   Array.from({ length: n }).forEach(() => fn());
 }
 
-export { repeat };
+function rangeMap<T>(n: number, fn: (i?: number) => T): T[] {
+  return Array.from({ length: n }).map((_, i) => fn(i));
+}
+
+export { repeat, rangeMap };

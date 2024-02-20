@@ -16,7 +16,7 @@ class Board {
     validateGrid(grid)
   }
 
-  static build(size: Size2d, players: Player[]) {
+  static buildBlank(size: Size2d, players: Player[]) {
     const grid = generateBlankGrid(size);
     return new Board(grid, players);
   }
@@ -64,6 +64,14 @@ class Board {
         yield square;
       }
     }
+  }
+
+  allSquares(): Square[] {
+    return Array.from(this.iterSquares());
+  }
+
+  allPlayerSquares(player: Player): PlayerSquare[] {
+    return Array.from(this.iterPlayerSquares(player));
   }
 
   canMove(source: Coord, direction: Movement): boolean {
