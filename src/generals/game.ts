@@ -1,23 +1,23 @@
 import { ActionType, performAction } from './actions';
 import { Board } from './board';
-
-const TROOP_RECRUITMENT_TURN_INTERVAL = 100;
+import { GameConfigData, GameConfig } from './game-config';
 
 // TODO: rename to Engine or something like that?
 class Game {
   players: Player[];
   board: Board;
-  ticksPerTurn: number;
+  config: GameConfig;
+  // ticksPerTurn: number;
 
   private tickCounter: number = 0;
   private playersById: Map<number, Player>;
   private onTickCallbacks: ((tick: number) => void)[] = [];
 
-  constructor(players: Player[], board: Board, ticksPerTurn: number) {
+  constructor(players: Player[], board: Board, config: GameConfig | GameConfigData) {
     this.players = players;
     this.playersById = new Map(players.map(p => [p.id, p]));
     this.board = board;
-    this.ticksPerTurn = ticksPerTurn;
+    this.config  = config instanceof GameConfig ? config : GameConfig.fromData(config);
   }
 
   getPlayer(id: number): Player {
@@ -38,6 +38,10 @@ class Game {
     return this.board.generals;
   }
 
+  get ticksPerTurn() {
+    return this.config.TICKS_PER_TURN;
+  }
+
   get turn() {
     return Math.floor(this.tickCounter / this.ticksPerTurn);
   }
@@ -50,7 +54,7 @@ class Game {
     return (
       this.turn > 0 &&
       this.isTurnTick &&
-      (this.turn % TROOP_RECRUITMENT_TURN_INTERVAL) === 0
+      (this.turn % this.config.TROOP_RECRUITMENT_TURN_INTERVAL) === 0
     );
   }
 

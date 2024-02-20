@@ -4,7 +4,7 @@ import { SquareType, Square, GameGrid, Coord, Size2d, PlayerSquare } from './typ
 
 // ----------------------------------------------------------------------------
 
-function generateGrid(size: Size2d): GameGrid {
+function generateBlankGrid(size: Size2d): GameGrid {
   const grid: any[][] = [];
   for (let y = 0; y < size.height; y++) {
     grid.push([]);
@@ -16,7 +16,7 @@ function generateGrid(size: Size2d): GameGrid {
 }
 
 function generateGridWithRandomMountains(size: Size2d): GameGrid {
-  const grid = generateGrid(size);
+  const grid = generateBlankGrid(size);
 
   for (let y = 0; y < size.height; y++) {
     for (let x = 0; x < size.width; x++) {
@@ -118,4 +118,4 @@ function convertToGeneral(square: Square, player: Player): PlayerSquare {
 
 // ----------------------------------------------------------------------------
 
-export { generateGrid, generateGridWithRandomMountains, addGenerals, addRandomGenerals };
+export { generateBlankGrid, generateGridWithRandomMountains, addGenerals, addRandomGenerals };

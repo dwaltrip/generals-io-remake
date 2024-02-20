@@ -8,9 +8,7 @@ import { ActionType, performAction } from './generals/actions';
 import { Coord, Movement, Square } from './generals/types';
 import { useEffect, useRef, useState } from 'react';
 import { GameClock } from './generals/game-clock';
-import { prettyPrintGrid } from './generals/utils';
-
-const TICKS_PER_TURN = 2;
+// import { prettyPrintGrid } from './generals/utils';
 
 function makeDummyGame() {
   const players = [
@@ -26,11 +24,11 @@ function makeDummyGame() {
       [players[0], { x: 4, y: 4 }],
       [players[1], { x: 6, y: 4 }],
     ])),
-    TICKS_PER_TURN,
+    { TICKS_PER_TURN: 2, TROOP_RECRUITMENT_TURN_INTERVAL: 5 },
   );
   game.generals.forEach(general => { general.units = 20; });
   
-  const clock = new GameClock(game, Math.floor(1000 / TICKS_PER_TURN));
+  const clock = new GameClock(game, Math.floor(1000 / game.ticksPerTurn));
   clock.start();
 
   type MoveAction = { type: ActionType.MOVE, args: { source: Coord, direction: Movement } };

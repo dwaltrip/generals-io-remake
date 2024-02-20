@@ -1,7 +1,7 @@
 import { GameGrid, Coord, Size2d, Square, Movement, SquareType, PlayerSquare } from '@/generals/types';
 
 import { Player } from '@/generals/game';
-import { generateGrid, addGenerals, addRandomGenerals } from '@/generals/generate-grid';
+import { generateBlankGrid, addGenerals, addRandomGenerals } from '@/generals/generate-grid';
 import { assert } from '@/utils/assert';
 import { isPlayerSquare } from './square';
 
@@ -17,19 +17,19 @@ class Board {
   }
 
   static build(size: Size2d, players: Player[]) {
-    const grid = generateGrid(size);
+    const grid = generateBlankGrid(size);
     return new Board(grid, players);
   }
 
   static buildWithGenerals(size: Size2d, players: Player[], generals: Map<Player, Coord>) {
-    const grid = generateGrid(size);
+    const grid = generateBlankGrid(size);
     const board = new Board(grid, players);
     board._setGenerals(players, addGenerals(grid, generals));
     return board;
   }
 
   static buildWithRandomGenerals(size: Size2d, players: Player[]) {
-    const grid = generateGrid(size);
+    const grid = generateBlankGrid(size);
     const board = new Board(grid, players);
     board._setGenerals(players, addRandomGenerals(grid, players));
     return board;
