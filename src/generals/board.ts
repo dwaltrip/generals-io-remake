@@ -3,7 +3,7 @@ import { GameGrid, Coord, Size2d, Square, Movement, SquareType, PlayerSquare } f
 import { Player } from '@/generals/game';
 import { generateBlankGrid, addGenerals, addRandomGenerals } from '@/generals/generate-grid';
 import { assert } from '@/utils/assert';
-import { isPlayerSquare } from './square';
+import { isPlayerSquare, isSquare } from './square';
 
 class Board {
   grid: GameGrid;
@@ -80,7 +80,11 @@ class Board {
       return false;
     }
     const dest = this.getSquare(destCoord);
-    return dest.type !== SquareType.MOUNTAIN;
+    // TODO: make this more robust. should be defined somewhere else
+    if (dest.type === SquareType.MOUNTAIN) {
+      return false;
+    }
+    return true;
   }
 
   getSquare(coord: Coord, movement?: Movement): Square {
@@ -102,6 +106,20 @@ class Board {
     assert(this.isCoordValid(coord), 'Coord is not valid');
     const { x, y } = coord;
     this.grid[y][x] = square;
+  }
+
+  neighborsFor(val: Coord | Square): Square[] {
+    const coord = isSquare(val) ? val.coord : val;
+    const deltas = [
+      [-1, 0],
+      [0, -1],
+      [1, 0],
+      [0, 1],
+    ];
+    return deltas
+      .map(([dx, dy]): Coord => ({ x: coord.x + dx, y: coord.y + dy }))
+      .filter(neighbor => this.isCoordValid(neighbor))
+      .map(neighbor => this.getSquare(neighbor));
   }
 }
 

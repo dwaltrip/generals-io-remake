@@ -4,11 +4,13 @@ import { isPlayerSquare } from "./square";
 import { Coord, Movement, PlayerSquare, PlayerSquareType, SquareType } from "./types";
 
 enum ActionType {
-  // User actions
+  // UI only actions (doesn't affect game state)
   SELECT_SQUARE,
+
+  // User actions
   MOVE,
 
-  // Engine actions
+  // Automatic actions
   GENERAL_PRODUCTION,
   TROOP_RECRUITMENT,
 }
@@ -34,6 +36,7 @@ function recruitTroops(game: Game) {
 function handleMove(game: Game, sourceCoord: Coord, direction: Movement) {
   const board = game.board;
   if (!board.canMove(sourceCoord, direction)) {
+    console.warn('[handleMove] Cannot move');
     return; 
   }
 
@@ -44,7 +47,7 @@ function handleMove(game: Game, sourceCoord: Coord, direction: Movement) {
   const dest = board.getSquare(sourceCoord, direction);
 
   if (source.units < 2) {
-    console.warn('Not enough units to move')
+    console.warn('[handleMove] Not enough units to move');
     return;
   }
 
@@ -101,6 +104,8 @@ function handleMove(game: Game, sourceCoord: Coord, direction: Movement) {
   }
 }
 
+// TODO: This is bad!!! args is untyped...
+// Already caused a bug in the tests
 function performAction(game: Game, action: ActionType, args?: any) {
   switch (action) {
     case ActionType.GENERAL_PRODUCTION:
